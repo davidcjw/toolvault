@@ -17,6 +17,7 @@ whole site is statically prerendered and costs ~$0 to run.
 | **Split PDF** (`/tools/split-pdf`) | Extract page ranges / split into single pages — `pdf-lib` + `fflate` zip. |
 | **Images → PDF** (`/tools/images-to-pdf`) | Combine images into one PDF, fit-to-image or A4 — `pdf-lib`. |
 | **PDF → Image** (`/tools/pdf-to-image`) | Render PDF pages to PNG/JPG at 1–3×, download individually or as a zip — `pdfjs-dist`. |
+| **Compress PDF** (`/tools/compress-pdf`) | Shrink scanned/image-heavy PDFs by flattening pages to JPEG — `pdfjs-dist` + `pdf-lib`. |
 | **QR Code Generator** (`/tools/qr-code`) | Custom colours + optional center logo, PNG/SVG — `qrcode`. |
 | **Screenshot Beautifier** (`/tools/screenshot-beautifier`) | Gradient/solid bg, padding, radius, shadow, window bar — Canvas. |
 | **Favicon Generator** (`/tools/favicon-generator`) | Full favicon pack (.ico + PNGs + manifest + HTML) zip — Canvas + `fflate`. |

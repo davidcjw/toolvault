@@ -17,6 +17,7 @@ import {
   Link2,
   QrCode,
   Scissors,
+  Shrink,
   Type,
   type LucideIcon,
 } from "lucide-react";
@@ -91,6 +92,17 @@ export const TOOLS: Tool[] = [
     category: "PDF",
     icon: FileDown,
     tags: ["pdf", "image", "png", "jpg", "convert", "render"],
+    status: "live",
+  },
+  {
+    slug: "compress-pdf",
+    name: "Compress PDF",
+    tagline: "Shrink scanned & image-heavy PDFs.",
+    description:
+      "Reduce PDF file size by flattening each page to a compressed JPEG, with a few quality levels. Great for scanned documents; note that text becomes non-selectable. Runs entirely in your browser — your PDF is never uploaded.",
+    category: "PDF",
+    icon: Shrink,
+    tags: ["pdf", "compress", "shrink", "reduce", "size", "scan"],
     status: "live",
   },
   {
