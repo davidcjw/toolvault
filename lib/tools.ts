@@ -107,11 +107,12 @@ export const TOOLS: Tool[] = [
     slug: "favicon-generator",
     name: "Favicon Generator",
     tagline: "Make favicons in every size from one image.",
-    description: "Generate a complete favicon set and the HTML to drop it in.",
+    description:
+      "Turn one image into a complete favicon pack — a multi-resolution favicon.ico, PNG icons, apple-touch-icon, a web manifest and the HTML snippet to paste in. Generated in your browser and bundled as a zip; nothing is uploaded.",
     category: "Dev",
     icon: AppWindow,
     tags: ["favicon", "icon", "ico", "developer"],
-    status: "soon",
+    status: "live",
   },
 ];
 
