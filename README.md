@@ -23,6 +23,14 @@ whole site is statically prerendered and costs ~$0 to run.
 | **Remove Background** (`/tools/remove-background`) | Transparent-PNG cut-outs via an in-browser AI model — `@imgly/background-removal`. |
 | **PayNow QR Generator** (`/tools/paynow-qr`) 🇸🇬 | SGQR PayNow code from a mobile/UEN, optional fixed amount + reference — `qrcode`. |
 | **GST Calculator** (`/tools/gst-calculator`) 🇸🇬 | Add/remove Singapore GST (9%). |
+| **JSON Formatter** (`/tools/json-formatter`) | Format, validate, minify JSON. |
+| **Base64 Encode / Decode** (`/tools/base64`) | UTF-8-safe text ↔ Base64. |
+| **URL Encode / Decode** (`/tools/url-encode`) | Percent-encode/decode URL text. |
+| **JWT Decoder** (`/tools/jwt-decoder`) | Decode JWT header/payload + timestamps (no verify). |
+| **Hash Generator** (`/tools/hash-generator`) | MD5 + SHA-1/256/384/512 of text. |
+| **UUID Generator** (`/tools/uuid-generator`) | Bulk v4 UUIDs. |
+| **Case Converter** (`/tools/case-converter`) | camelCase, snake_case, kebab, slug, etc. |
+| **Text Diff** (`/tools/text-diff`) | Line-by-line LCS diff. |
 
 Add more by appending to `lib/tools.ts` (set `status: "soon"` for roadmap cards).
 The **Singapore** category is the localized moat — keep its figures (GST, tax,
