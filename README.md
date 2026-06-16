@@ -14,9 +14,14 @@ whole site is statically prerendered and costs ~$0 to run.
 |------|--------------|
 | **Image Converter & Compressor** (`/tools/image-converter`) | Convert between WebP/JPG/PNG, resize, and compress — Canvas-based. |
 | **Merge PDF** (`/tools/merge-pdf`) | Combine and reorder multiple PDFs into one — `pdf-lib`. |
+| **Split PDF** (`/tools/split-pdf`) | Extract page ranges / split into single pages — `pdf-lib` + `fflate` zip. |
+| **Images → PDF** (`/tools/images-to-pdf`) | Combine images into one PDF, fit-to-image or A4 — `pdf-lib`. |
+| **QR Code Generator** (`/tools/qr-code`) | Custom colours + optional center logo, PNG/SVG — `qrcode`. |
+| **Screenshot Beautifier** (`/tools/screenshot-beautifier`) | Gradient/solid bg, padding, radius, shadow, window bar — Canvas. |
+| **Favicon Generator** (`/tools/favicon-generator`) | Full favicon pack (.ico + PNGs + manifest + HTML) zip — Canvas + `fflate`. |
+| **Remove Background** (`/tools/remove-background`) | Transparent-PNG cut-outs via an in-browser AI model — `@imgly/background-removal`. |
 
-More tools are stubbed as "coming soon" in `lib/tools.ts` (split PDF, images→PDF,
-background remover, QR code, screenshot beautifier, favicon generator).
+Add more by appending to `lib/tools.ts` (set `status: "soon"` for roadmap cards).
 
 ## Tech stack
 

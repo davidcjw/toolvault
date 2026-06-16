@@ -75,11 +75,12 @@ export const TOOLS: Tool[] = [
     slug: "remove-background",
     name: "Remove Background",
     tagline: "Erase image backgrounds, on-device.",
-    description: "Cut out the background from any image right in your browser.",
+    description:
+      "Cut out the background from any image and get a transparent PNG. An AI model runs directly in your browser — your image is never uploaded; only the model is downloaded once.",
     category: "Image",
     icon: Eraser,
     tags: ["image", "background", "remove", "transparent"],
-    status: "soon",
+    status: "live",
   },
   {
     slug: "screenshot-beautifier",

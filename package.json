@@ -11,6 +11,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@imgly/background-removal": "^1.7.0",
     "fflate": "^0.8.3",
     "lucide-react": "^1.18.0",
     "motion": "^12.40.0",
