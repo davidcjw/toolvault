@@ -22,6 +22,11 @@ export async function qrToCanvas(
     errorCorrectionLevel: o.ecc,
     color: { dark: o.dark, light: o.light },
   });
+  // QRCode.toCanvas pins inline width/height to `size`px, which would force the
+  // canvas to render at full resolution and overflow its container. Drop it so
+  // CSS controls the display size; the high-res bitmap is kept for downloads.
+  canvas.style.removeProperty("width");
+  canvas.style.removeProperty("height");
 }
 
 /** Produce a standalone SVG string for the QR code. */
