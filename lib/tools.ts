@@ -1,5 +1,7 @@
 import {
   AppWindow,
+  Banknote,
+  Calculator,
   Eraser,
   FileImage,
   FileStack,
@@ -10,7 +12,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-export type ToolCategory = "Image" | "PDF" | "Generate" | "Dev";
+export type ToolCategory = "Image" | "PDF" | "Generate" | "Dev" | "Singapore";
 
 export type Tool = {
   slug: string;
@@ -115,9 +117,39 @@ export const TOOLS: Tool[] = [
     tags: ["favicon", "icon", "ico", "developer"],
     status: "live",
   },
+
+  // ── Singapore ───────────────────────────────────────────────────
+  {
+    slug: "paynow-qr",
+    name: "PayNow QR Generator",
+    tagline: "Free PayNow QR from a mobile number or UEN.",
+    description:
+      "Generate a PayNow QR code for a Singapore mobile number or UEN, with an optional fixed amount and reference. Builds the standard SGQR payload in your browser and downloads as PNG or SVG — free, no sign-up, codes never expire.",
+    category: "Singapore",
+    icon: Banknote,
+    tags: ["paynow", "qr", "sgqr", "singapore", "payment", "uen"],
+    status: "live",
+  },
+  {
+    slug: "gst-calculator",
+    name: "GST Calculator",
+    tagline: "Add or remove Singapore GST (9%).",
+    description:
+      "Add 9% GST to a price, or work out the GST already included in a total. Singapore rates, calculated instantly in your browser.",
+    category: "Singapore",
+    icon: Calculator,
+    tags: ["gst", "tax", "singapore", "calculator", "9%"],
+    status: "live",
+  },
 ];
 
-export const CATEGORIES: ToolCategory[] = ["Image", "PDF", "Generate", "Dev"];
+export const CATEGORIES: ToolCategory[] = [
+  "Image",
+  "PDF",
+  "Generate",
+  "Dev",
+  "Singapore",
+];
 
 export function toolHref(tool: Tool): string {
   return `/tools/${tool.slug}`;

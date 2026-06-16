@@ -20,8 +20,12 @@ whole site is statically prerendered and costs ~$0 to run.
 | **Screenshot Beautifier** (`/tools/screenshot-beautifier`) | Gradient/solid bg, padding, radius, shadow, window bar — Canvas. |
 | **Favicon Generator** (`/tools/favicon-generator`) | Full favicon pack (.ico + PNGs + manifest + HTML) zip — Canvas + `fflate`. |
 | **Remove Background** (`/tools/remove-background`) | Transparent-PNG cut-outs via an in-browser AI model — `@imgly/background-removal`. |
+| **PayNow QR Generator** (`/tools/paynow-qr`) 🇸🇬 | SGQR PayNow code from a mobile/UEN, optional fixed amount + reference — `qrcode`. |
+| **GST Calculator** (`/tools/gst-calculator`) 🇸🇬 | Add/remove Singapore GST (9%). |
 
 Add more by appending to `lib/tools.ts` (set `status: "soon"` for roadmap cards).
+The **Singapore** category is the localized moat — keep its figures (GST, tax,
+CPF) current and dated, since they change yearly.
 
 ## Tech stack
 
