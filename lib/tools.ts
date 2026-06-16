@@ -53,21 +53,23 @@ export const TOOLS: Tool[] = [
     slug: "split-pdf",
     name: "Split PDF",
     tagline: "Extract or split pages from a PDF.",
-    description: "Split a PDF into separate files or pull out specific pages.",
+    description:
+      "Extract specific pages or page ranges from a PDF, combine them into one file, or split a document into single pages. Runs entirely in your browser — your PDF is never uploaded.",
     category: "PDF",
     icon: Scissors,
     tags: ["pdf", "split", "extract", "pages"],
-    status: "soon",
+    status: "live",
   },
   {
     slug: "images-to-pdf",
     name: "Images to PDF",
     tagline: "Turn JPG/PNG images into a single PDF.",
-    description: "Combine photos and scans into one tidy PDF document.",
+    description:
+      "Combine photos and scans into one tidy PDF document, in any order, with fit-to-image or A4 pages. Everything runs locally in your browser — your images never leave your device.",
     category: "PDF",
     icon: FileImage,
     tags: ["pdf", "image", "jpg", "png", "convert"],
-    status: "soon",
+    status: "live",
   },
   {
     slug: "remove-background",
