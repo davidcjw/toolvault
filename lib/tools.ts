@@ -85,21 +85,23 @@ export const TOOLS: Tool[] = [
     slug: "screenshot-beautifier",
     name: "Screenshot Beautifier",
     tagline: "Wrap screenshots in gradients & frames.",
-    description: "Make plain screenshots look polished for social and docs.",
+    description:
+      "Make plain screenshots look polished with gradient or solid backgrounds, padding, rounded corners, a drop shadow and a macOS-style window bar. Composited in your browser at full resolution — nothing is uploaded.",
     category: "Image",
     icon: Images,
     tags: ["screenshot", "mockup", "gradient", "frame"],
-    status: "soon",
+    status: "live",
   },
   {
     slug: "qr-code",
     name: "QR Code Generator",
     tagline: "Free QR codes with custom colors & logo.",
-    description: "Generate static QR codes for links, text and Wi-Fi — no signup.",
+    description:
+      "Generate static QR codes for links, text and more, with custom colours and an optional center logo. Download as PNG or SVG. Codes never expire and are created entirely in your browser.",
     category: "Generate",
     icon: QrCode,
     tags: ["qr", "code", "generate", "link"],
-    status: "soon",
+    status: "live",
   },
   {
     slug: "favicon-generator",
