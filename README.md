@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Toolvault — free, private browser tools
 
-## Getting Started
+A growing collection of free file tools that run **100% in your browser**. No
+uploads, no sign-up, no file-size limits. Your files stay locked on your device
+and are never sent to a server.
 
-First, run the development server:
+This is both a useful product and an SEO play: every tool is its own
+search-optimised landing page, and because all processing is client-side, the
+whole site is statically prerendered and costs ~$0 to run.
+
+## Live tools
+
+| Tool | What it does |
+|------|--------------|
+| **Image Converter & Compressor** (`/tools/image-converter`) | Convert between WebP/JPG/PNG, resize, and compress — Canvas-based. |
+| **Merge PDF** (`/tools/merge-pdf`) | Combine and reorder multiple PDFs into one — `pdf-lib`. |
+
+More tools are stubbed as "coming soon" in `lib/tools.ts` (split PDF, images→PDF,
+background remover, QR code, screenshot beautifier, favicon generator).
+
+## Tech stack
+
+- **Next.js 16** (App Router, Turbopack) — all routes statically prerendered
+- **React 19**, **TypeScript**
+- **Tailwind CSS v4** with semantic design tokens in `app/globals.css`
+- **Motion** (Framer Motion) for the landing animations
+- **pdf-lib** (PDF), Canvas API (images) — all client-side
+- **lucide-react** icons, **Hanken Grotesk** + **JetBrains Mono** fonts
+- **Vitest** for unit tests
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm test         # unit tests (lib/*.test.ts)
+npm run lint
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Add a new tool
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Add an entry to `TOOLS` in `lib/tools.ts` (set `status: "live"`).
+2. Put pure, testable logic in `lib/` (add a `*.test.ts`); keep browser/Canvas
+   calls in their own client helper.
+3. Build the interactive client component in `components/<tool>-tool.tsx`.
+4. Create `app/tools/<slug>/page.tsx` — a server component that exports
+   `metadata` and renders `<ToolShell tool={...} faqs={...}>`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The homepage grid, footer, sitemap and JSON-LD all read from the registry
+automatically.
 
-## Learn More
+## Deploy (Vercel)
 
-To learn more about Next.js, take a look at the following resources:
+1. Push to GitHub and import into Vercel — no environment variables needed.
+2. Update `SITE.url` in `lib/site.ts` to your production domain (used by
+   metadata, `sitemap.xml`, `robots.txt`, and JSON-LD).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A favicon is included (`app/favicon.ico` + `app/icon.svg`).
