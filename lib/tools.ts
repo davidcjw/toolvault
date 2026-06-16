@@ -268,3 +268,13 @@ export function getTool(slug: string): Tool | undefined {
 }
 
 export const LIVE_TOOLS = TOOLS.filter((t) => t.status === "live");
+
+/** Live tools related to a given one: same category first, then others. */
+export function relatedTools(slug: string, limit = 4): Tool[] {
+  const current = getTool(slug);
+  const live = LIVE_TOOLS.filter((t) => t.slug !== slug);
+  if (!current) return live.slice(0, limit);
+  const sameCat = live.filter((t) => t.category === current.category);
+  const others = live.filter((t) => t.category !== current.category);
+  return [...sameCat, ...others].slice(0, limit);
+}

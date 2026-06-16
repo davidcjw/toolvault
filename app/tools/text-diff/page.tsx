@@ -11,7 +11,7 @@ export const metadata: Metadata = tool
       title: `${tool.name} — Free & Private`,
       description: tool.description,
       alternates: { canonical: toolHref(tool) },
-      openGraph: { title: tool.name, description: tool.description },
+      openGraph: { title: tool.name, description: tool.description, images: [`/og?title=${encodeURIComponent(tool.name)}&cat=${tool.category}`] },
     }
   : {};
 

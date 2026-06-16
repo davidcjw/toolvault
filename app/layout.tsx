@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+
+const OG_IMAGE = `/og?title=${encodeURIComponent(SITE.tagline)}`;
 
 const sans = Hanken_Grotesk({
   variable: "--font-hanken",
@@ -40,11 +44,13 @@ export const metadata: Metadata = {
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.description,
     url: SITE.url,
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.description,
+    images: [OG_IMAGE],
   },
 };
 
@@ -60,6 +66,8 @@ export default function RootLayout({
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -38,13 +38,23 @@ CPF) current and dated, since they change yearly.
 
 ## Tech stack
 
-- **Next.js 16** (App Router, Turbopack) — all routes statically prerendered
+- **Next.js 16** (App Router, Turbopack) — all routes static except the `/og` image route
 - **React 19**, **TypeScript**
 - **Tailwind CSS v4** with semantic design tokens in `app/globals.css`
 - **Motion** (Framer Motion) for the landing animations
 - **pdf-lib** (PDF), Canvas API (images) — all client-side
 - **lucide-react** icons, **Hanken Grotesk** + **JetBrains Mono** fonts
 - **Vitest** for unit tests
+- **@vercel/analytics** + **@vercel/speed-insights** (cookieless). Enable Web
+  Analytics once in the Vercel dashboard (Project → Analytics) to collect data.
+
+## SEO / growth
+
+- Dynamic social cards: `app/og/route.tsx` renders a branded OG image per tool;
+  each tool page sets `openGraph.images` to `/og?title=…&cat=…`.
+- Every tool page ends with a **Related tools** block (`relatedTools()` in
+  `lib/tools.ts`) for internal linking — same category first, then others.
+- Per-tool metadata + FAQ JSON-LD + `sitemap.xml` + `robots.txt`.
 
 ## Develop
 

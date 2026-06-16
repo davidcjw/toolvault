@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { type Tool, toolHref } from "@/lib/tools";
+import { relatedTools, type Tool, toolHref } from "@/lib/tools";
 import { SITE } from "@/lib/site";
 import { PrivacyBadge } from "@/components/privacy-badge";
+import { ToolCard } from "@/components/tool-card";
 
 export type Faq = { q: string; a: string };
 
@@ -99,6 +100,15 @@ export function ToolShell({
             </div>
           ))}
         </dl>
+      </section>
+
+      <section className="mt-14">
+        <h2 className="text-xl font-bold tracking-tight text-ink">Related tools</h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {relatedTools(tool.slug).map((t) => (
+            <ToolCard key={t.slug} tool={t} />
+          ))}
+        </div>
       </section>
     </div>
   );
