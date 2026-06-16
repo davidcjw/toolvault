@@ -121,9 +121,9 @@ export function Landing() {
       <section id="how" className="mx-auto max-w-6xl px-5 py-12">
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            { n: "01", t: "Pick a file", d: "Drop in an image or PDF — straight from your device." },
-            { n: "02", t: "It runs locally", d: "Your browser does the work. Nothing is sent anywhere." },
-            { n: "03", t: "Download", d: "Save the result instantly. No watermarks, no waiting." },
+            { n: "01", t: "Pick a tool", d: "Choose any tool — drop a file or paste text, straight from your device." },
+            { n: "02", t: "It runs locally", d: "Your browser does the work. Nothing is ever uploaded." },
+            { n: "03", t: "Save it", d: "Download or copy the result instantly. No watermarks, no sign-up." },
           ].map((s) => (
             <div key={s.n} className="rounded-2xl border border-line bg-surface p-6">
               <span className="font-mono text-sm text-accent">{s.n}</span>
