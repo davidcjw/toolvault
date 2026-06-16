@@ -3,6 +3,7 @@ import {
   Banknote,
   Calculator,
   Eraser,
+  FileDown,
   FileImage,
   FileStack,
   Images,
@@ -71,6 +72,17 @@ export const TOOLS: Tool[] = [
     category: "PDF",
     icon: FileImage,
     tags: ["pdf", "image", "jpg", "png", "convert"],
+    status: "live",
+  },
+  {
+    slug: "pdf-to-image",
+    name: "PDF to Image",
+    tagline: "Convert PDF pages to PNG or JPG.",
+    description:
+      "Turn each page of a PDF into a PNG or JPG image at your chosen resolution, then download them individually or as a zip. Rendered in your browser with pdf.js — your PDF is never uploaded.",
+    category: "PDF",
+    icon: FileDown,
+    tags: ["pdf", "image", "png", "jpg", "convert", "render"],
     status: "live",
   },
   {
