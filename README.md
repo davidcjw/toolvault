@@ -1,8 +1,17 @@
 # Toolvault — free, private browser tools
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript&logoColor=white)
+![100% client-side](https://img.shields.io/badge/processing-100%25%20client--side-brightgreen)
+
 A growing collection of free file tools that run **100% in your browser**. No
 uploads, no sign-up, no file-size limits. Your files stay locked on your device
 and are never sent to a server.
+
+<p align="center">
+  <img src="docs/demo.gif" alt="Toolvault demo" width="640">
+</p>
 
 This is both a useful product and an SEO play: every tool is its own
 search-optimised landing page, and because all processing is client-side, the
@@ -86,3 +95,25 @@ automatically.
    metadata, `sitemap.xml`, `robots.txt`, and JSON-LD).
 
 A favicon is included (`app/favicon.ico` + `app/icon.svg`).
+
+## Contributing
+
+Contributions are welcome! Please open an issue first to discuss what you'd like to change.
+
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'feat: describe change'`)
+4. Push and open a pull request
+
+Before submitting a PR, make sure `npm test`, `npm run lint`, and `npm run build`
+all pass. See [AGENTS.md](AGENTS.md) for architecture and conventions, and the
+**Add a new tool** section above for the tool-authoring workflow.
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant v2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+By participating you agree to uphold a welcoming, harassment-free environment.
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
