@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy, Download, Loader2, RefreshCw } from "lucide-react";
-import { Dropzone } from "@/components/dropzone";
+import { ImageDropzone } from "@/components/image-dropzone";
 import {
   FAVICON_HTML,
   FAVICON_SIZES,
@@ -121,12 +121,11 @@ export function FaviconGeneratorTool() {
 
   if (!src) {
     return (
-      <Dropzone
-        accept="image/*"
+      <ImageDropzone
         onFiles={addFiles}
         multiple={false}
         label="Drop a square image here"
-        hint="PNG or JPG, at least 512×512 for best results"
+        hint="PNG, JPG or HEIC, at least 512×512 for best results"
       />
     );
   }

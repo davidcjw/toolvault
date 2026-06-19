@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { clamp, layerRect, makeLayer, widthFromCorner } from "./overlay";
+import {
+  clamp,
+  compositeBounds,
+  layerBounds,
+  layerRect,
+  makeLayer,
+  widthFromCorner,
+} from "./overlay";
 
 describe("makeLayer", () => {
   it("centres a new overlay at 40% width with neutral transform", () => {
@@ -39,6 +46,41 @@ describe("layerRect", () => {
     const r = layerRect({ ...l, w: 0.5 }, 400, 400);
     expect(r.w).toBe(200);
     expect(r.h).toBe(100);
+  });
+});
+
+describe("layerBounds", () => {
+  it("equals the layer rect when unrotated", () => {
+    const l = { ...makeLayer("a", "x", 1), w: 0.5, cx: 0.5, cy: 0.5 };
+    expect(layerBounds(l, 200, 100)).toEqual(layerRect(l, 200, 100));
+  });
+
+  it("grows the AABB when rotated 45°", () => {
+    const l = { ...makeLayer("a", "x", 1), w: 0.5, rotation: 45 };
+    const r = layerRect(l, 200, 200); // 100x100 square
+    const b = layerBounds(l, 200, 200);
+    // 100px square rotated 45° → AABB side = 100*sqrt(2) ≈ 141.4
+    expect(b.w).toBeCloseTo(100 * Math.SQRT2, 3);
+    expect(b.h).toBeCloseTo(100 * Math.SQRT2, 3);
+    // still centred on the same point
+    expect(b.x + b.w / 2).toBeCloseTo(r.x + r.w / 2, 3);
+  });
+});
+
+describe("compositeBounds", () => {
+  it("is exactly the base rect when overlays sit inside", () => {
+    const l = { ...makeLayer("a", "x", 1), w: 0.2, cx: 0.5, cy: 0.5 };
+    expect(compositeBounds(400, 300, [l])).toEqual({ x: 0, y: 0, w: 400, h: 300 });
+  });
+
+  it("expands left/up when an overlay spills past the top-left corner", () => {
+    const l = { ...makeLayer("a", "x", 1), w: 0.5, cx: 0, cy: 0 }; // centred on corner
+    const b = compositeBounds(400, 400, [l]);
+    // overlay is 200x200 centred at (0,0) → reaches (-100,-100)
+    expect(b.x).toBeCloseTo(-100, 3);
+    expect(b.y).toBeCloseTo(-100, 3);
+    expect(b.w).toBeCloseTo(500, 3);
+    expect(b.h).toBeCloseTo(500, 3);
   });
 });
 

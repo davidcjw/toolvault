@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Download, FileText, Loader2, X } from "lucide-react";
 import { Dropzone } from "@/components/dropzone";
+import { GooeyLoader } from "@/components/gooey-loader";
 import { pageCount } from "@/lib/pdf";
 import {
   renderPdfToImages,
@@ -192,6 +193,15 @@ export function PdfToImageTool() {
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
+
+      {busy && (
+        <div className="grid place-items-center rounded-xl border border-line bg-surface p-8 text-center">
+          <GooeyLoader className="mx-auto" />
+          <p className="mt-3 text-sm text-ink">
+            {progress ? `Rendering ${progress.n}/${progress.total}…` : "Rendering…"}
+          </p>
+        </div>
+      )}
 
       {pages.length > 0 && (
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3">

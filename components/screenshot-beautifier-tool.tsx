@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Download, RefreshCw } from "lucide-react";
-import { Dropzone } from "@/components/dropzone";
+import { ImageDropzone } from "@/components/image-dropzone";
 import { GRADIENTS, outputSize } from "@/lib/screenshot";
 import { downloadBlob } from "@/lib/download";
 
@@ -112,12 +112,11 @@ export function ScreenshotBeautifierTool() {
 
   if (!src) {
     return (
-      <Dropzone
-        accept="image/*"
+      <ImageDropzone
         onFiles={addFiles}
         multiple={false}
         label="Drop a screenshot here"
-        hint="PNG · JPG — styled instantly, on-device"
+        hint="PNG · JPG · HEIC — styled instantly, on-device"
       />
     );
   }

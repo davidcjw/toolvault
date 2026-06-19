@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Download, Loader2, Trash2, X } from "lucide-react";
-import { Dropzone } from "@/components/dropzone";
+import { ImageDropzone } from "@/components/image-dropzone";
 import {
   FORMAT_OPTIONS,
   extFor,
@@ -113,11 +113,10 @@ export function ImageTool() {
   return (
     <div className="space-y-6">
       {items.length === 0 ? (
-        <Dropzone
-          accept="image/*"
+        <ImageDropzone
           onFiles={addFiles}
           label="Drop images here"
-          hint="PNG · JPG · WebP — batch supported"
+          hint="PNG · JPG · WebP · HEIC — batch supported"
         />
       ) : (
         <>
@@ -269,11 +268,10 @@ export function ImageTool() {
             ))}
           </ul>
 
-          <Dropzone
-            accept="image/*"
+          <ImageDropzone
             onFiles={addFiles}
             label="Add more images"
-            hint="PNG · JPG · WebP"
+            hint="PNG · JPG · WebP · HEIC"
           />
         </>
       )}

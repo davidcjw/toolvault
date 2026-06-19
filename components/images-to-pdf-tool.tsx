@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ArrowDown, ArrowUp, Loader2, Trash2, X } from "lucide-react";
-import { Dropzone } from "@/components/dropzone";
+import { ImageDropzone } from "@/components/image-dropzone";
 import { imagesToPdf, type PageMode } from "@/lib/pdf";
 import { move } from "@/lib/format";
 import { downloadBlob } from "@/lib/download";
@@ -61,11 +61,10 @@ export function ImagesToPdfTool() {
   return (
     <div className="space-y-6">
       {items.length === 0 ? (
-        <Dropzone
-          accept="image/*"
+        <ImageDropzone
           onFiles={addFiles}
           label="Drop images here"
-          hint="JPG · PNG · WebP — one image per page"
+          hint="JPG · PNG · WebP · HEIC — one image per page"
         />
       ) : (
         <>
@@ -162,8 +161,7 @@ export function ImagesToPdfTool() {
             </button>
           </div>
 
-          <Dropzone
-            accept="image/*"
+          <ImageDropzone
             onFiles={addFiles}
             label="Add more images"
             hint="They're added to the end"

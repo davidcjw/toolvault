@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Download,
   Eraser,
@@ -15,11 +15,15 @@ import {
   Trash2,
 } from "lucide-react";
 import { Dropzone } from "@/components/dropzone";
+import { GooeyLoader } from "@/components/gooey-loader";
+import { ImageTouchUp } from "@/components/image-touchup";
 import { downloadBlob } from "@/lib/download";
 import { changeExtension } from "@/lib/format";
 import { removeImageBackground } from "@/lib/bgremove";
+import { convertHeic, isHeic } from "@/lib/heic";
 import {
   clamp,
+  compositeBounds,
   makeLayer,
   renderComposite,
   widthFromCorner,
@@ -40,19 +44,43 @@ type Drag = {
 };
 
 export function ImageOverlayTool() {
-  const [base, setBase] = useState<{ src: string; name: string; w: number; h: number } | null>(null);
+  const [base, setBase] = useState<{
+    src: string;
+    original: string;
+    name: string;
+    w: number;
+    h: number;
+  } | null>(null);
   const [layers, setLayers] = useState<Layer[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+  const [touchUp, setTouchUp] = useState(false);
+  const [trimExport, setTrimExport] = useState(true);
   const [bgBusy, setBgBusy] = useState<{ id: string; label: string; pct: number } | null>(null);
   const [bgError, setBgError] = useState<string | null>(null);
+  const [decoding, setDecoding] = useState(false);
+  // Rendered size of the base image, so the expanding checker frame can reserve
+  // matching layout space in pixels.
+  const [dims, setDims] = useState({ w: 0, h: 0 });
 
   const stageRef = useRef<HTMLDivElement>(null);
+  const baseImgRef = useRef<HTMLImageElement>(null);
   const dragRef = useRef<Drag | null>(null);
   const idRef = useRef(0);
   const overlayInputRef = useRef<HTMLInputElement>(null);
 
   const selected = layers.find((l) => l.id === selectedId) ?? null;
+
+  useEffect(() => {
+    const el = baseImgRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      const r = entries[0].contentRect;
+      setDims({ w: r.width, h: r.height });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [base]);
 
   function loadDims(src: string): Promise<{ w: number; h: number }> {
     return new Promise((resolve) => {
@@ -62,24 +90,44 @@ export function ImageOverlayTool() {
     });
   }
 
+  /** Decode HEIC to PNG; pass other images through unchanged. */
+  async function toUsableBlob(file: File): Promise<Blob> {
+    return isHeic(file) ? convertHeic(file, "image/png") : file;
+  }
+
   async function addBase(files: File[]) {
-    const img = files.find((f) => f.type.startsWith("image/"));
+    const img = files.find((f) => f.type.startsWith("image/") || isHeic(f));
     if (!img) return;
-    const src = URL.createObjectURL(img);
-    const { w, h } = await loadDims(src);
-    setBase({ src, name: img.name, w, h });
+    setBgError(null);
+    setDecoding(isHeic(img));
+    try {
+      const src = URL.createObjectURL(await toUsableBlob(img));
+      const { w, h } = await loadDims(src);
+      setBase({ src, original: src, name: img.name, w, h });
+    } catch {
+      setBgError("Couldn't read that HEIC file. Try converting it first.");
+    } finally {
+      setDecoding(false);
+    }
   }
 
   async function addOverlayFiles(files: FileList | null) {
     if (!files) return;
+    setBgError(null);
     for (const file of Array.from(files)) {
-      if (!file.type.startsWith("image/")) continue;
-      const src = URL.createObjectURL(file);
-      const { w, h } = await loadDims(src);
-      const id = `layer-${idRef.current++}`;
-      const layer = makeLayer(id, src, w ? h / w : 1);
-      setLayers((prev) => [...prev, layer]);
-      setSelectedId(id);
+      if (!file.type.startsWith("image/") && !isHeic(file)) continue;
+      setDecoding(isHeic(file));
+      try {
+        const src = URL.createObjectURL(await toUsableBlob(file));
+        const { w, h } = await loadDims(src);
+        const id = `layer-${idRef.current++}`;
+        setLayers((prev) => [...prev, makeLayer(id, src, w ? h / w : 1)]);
+        setSelectedId(id);
+      } catch {
+        setBgError("Couldn't read that HEIC file. Try converting it first.");
+      } finally {
+        setDecoding(false);
+      }
     }
     if (overlayInputRef.current) overlayInputRef.current.value = "";
   }
@@ -106,7 +154,9 @@ export function ImageOverlayTool() {
         setBgBusy({ id: "base", ...p }),
       );
       const url = URL.createObjectURL(blob);
-      URL.revokeObjectURL(base.src);
+      // Keep base.original alive (it may share the URL on first load) so the
+      // touch-up restore brush can still load the original photo.
+      if (base.src !== base.original) URL.revokeObjectURL(base.src);
       setBase({ ...base, src: url });
     } catch (err) {
       setBgError((err as Error).message || "Background removal failed. Try another image.");
@@ -145,18 +195,30 @@ export function ImageOverlayTool() {
   }
 
   function reset() {
-    if (base) URL.revokeObjectURL(base.src);
+    if (base) {
+      URL.revokeObjectURL(base.src);
+      if (base.original !== base.src) URL.revokeObjectURL(base.original);
+    }
     layers.forEach((l) => URL.revokeObjectURL(l.src));
     setBase(null);
     setLayers([]);
     setSelectedId(null);
+    setTouchUp(false);
+  }
+
+  function applyTouchUp(blob: Blob) {
+    if (!base) return;
+    const url = URL.createObjectURL(blob);
+    if (base.src !== base.original) URL.revokeObjectURL(base.src);
+    setBase({ ...base, src: url });
+    setTouchUp(false);
   }
 
   async function exportPng() {
     if (!base) return;
     setExporting(true);
     try {
-      const blob = await renderComposite(base.src, base.w, base.h, layers);
+      const blob = await renderComposite(base.src, base.w, base.h, layers, trimExport);
       downloadBlob(blob, changeExtension(base.name, "png"));
     } finally {
       setExporting(false);
@@ -218,13 +280,21 @@ export function ImageOverlayTool() {
   if (!base) {
     return (
       <div className="space-y-4">
-        <Dropzone
-          accept="image/*"
-          onFiles={addBase}
-          multiple={false}
-          label="Drop your base image here"
-          hint="The photo you want to add things onto — PNG or JPG"
-        />
+        {decoding ? (
+          <div className="grid place-items-center rounded-2xl border border-line bg-surface p-12 text-center">
+            <GooeyLoader className="mx-auto" />
+            <p className="mt-3 text-sm text-ink">Converting HEIC…</p>
+          </div>
+        ) : (
+          <Dropzone
+            accept="image/*,.heic,.heif"
+            onFiles={addBase}
+            multiple={false}
+            label="Drop your base image here"
+            hint="The photo you want to add things onto — PNG, JPG or HEIC"
+          />
+        )}
+        {bgError && <p className="text-center text-sm text-destructive">{bgError}</p>}
         <p className="text-center text-sm text-subtle">
           Then add overlays (a hat, logo or sticker) and drag them into place.
           Need a clean cut-out? Select an overlay and hit{" "}
@@ -234,6 +304,28 @@ export function ImageOverlayTool() {
       </div>
     );
   }
+
+  if (touchUp) {
+    return (
+      <ImageTouchUp
+        src={base.src}
+        originalSrc={base.original}
+        onApply={applyTouchUp}
+        onCancel={() => setTouchUp(false)}
+      />
+    );
+  }
+
+  // How far the composite spills past each edge of the base, as a fraction of
+  // the base dimensions. Drives both the expanding checker frame and the
+  // reserved margins so the on-screen canvas grows like the exported PNG.
+  const cb = compositeBounds(base.w, base.h, layers);
+  const overflow = {
+    left: Math.max(0, -cb.x) / base.w,
+    top: Math.max(0, -cb.y) / base.h,
+    right: Math.max(0, cb.x + cb.w - base.w) / base.w,
+    bottom: Math.max(0, cb.y + cb.h - base.h) / base.h,
+  };
 
   return (
     <div className="space-y-5">
@@ -247,7 +339,7 @@ export function ImageOverlayTool() {
         <input
           ref={overlayInputRef}
           type="file"
-          accept="image/*"
+          accept="image/*,.heic,.heif"
           multiple
           hidden
           onChange={(e) => addOverlayFiles(e.target.files)}
@@ -266,6 +358,13 @@ export function ImageOverlayTool() {
             ? `${bgBusy.label} ${bgBusy.pct}%`
             : "Remove base background"}
         </button>
+        <button
+          onClick={() => setTouchUp(true)}
+          disabled={!!bgBusy}
+          className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-accent-strong hover:text-accent-strong disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <Eraser className="h-4 w-4" /> Touch up base
+        </button>
         <span className="font-mono text-xs text-subtle">
           {layers.length} overlay{layers.length === 1 ? "" : "s"}
         </span>
@@ -274,21 +373,52 @@ export function ImageOverlayTool() {
       {bgError && <p className="text-sm text-destructive">{bgError}</p>}
 
       {/* Stage */}
-      <div className={`grid place-items-center rounded-xl border border-line p-3 ${CHECKER}`}>
+      <div className="relative grid place-items-center rounded-xl border border-line p-3">
+        {(bgBusy || exporting || decoding) && (
+          <div className="absolute inset-0 z-10 grid place-items-center rounded-xl bg-canvas/70 backdrop-blur-sm">
+            <div className="text-center">
+              <GooeyLoader className="mx-auto" />
+              <p className="mt-3 text-sm text-ink">
+                {bgBusy
+                  ? `${bgBusy.label} ${bgBusy.pct}%`
+                  : decoding
+                    ? "Converting HEIC…"
+                    : "Rendering PNG…"}
+              </p>
+            </div>
+          </div>
+        )}
         <div
           ref={stageRef}
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerLeave={endDrag}
           className="relative inline-block max-h-[70vh] max-w-full touch-none select-none"
+          style={{
+            marginTop: overflow.top * dims.h,
+            marginBottom: overflow.bottom * dims.h,
+            marginLeft: overflow.left * dims.w,
+            marginRight: overflow.right * dims.w,
+          }}
         >
+          {/* Expanding canvas: grows past the base to match the exported PNG */}
+          <div
+            className={`pointer-events-none absolute rounded-lg border border-line ${CHECKER}`}
+            style={{
+              left: `${-overflow.left * 100}%`,
+              top: `${-overflow.top * 100}%`,
+              right: `${-overflow.right * 100}%`,
+              bottom: `${-overflow.bottom * 100}%`,
+            }}
+          />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
+            ref={baseImgRef}
             src={base.src}
             alt="Base"
             draggable={false}
             onPointerDown={() => setSelectedId(null)}
-            className="block max-h-[70vh] max-w-full select-none"
+            className="relative block max-h-[70vh] max-w-full select-none"
           />
 
           {layers.map((layer) => {
@@ -429,12 +559,21 @@ export function ImageOverlayTool() {
       <div className="flex flex-wrap items-center gap-3">
         <button
           onClick={exportPng}
-          disabled={exporting || layers.length === 0}
+          disabled={exporting}
           className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent-strong px-5 py-2.5 font-semibold text-white transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
         >
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
           {exporting ? "Rendering…" : "Download PNG"}
         </button>
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-muted">
+          <input
+            type="checkbox"
+            checked={trimExport}
+            onChange={(e) => setTrimExport(e.target.checked)}
+            className="accent-accent-strong"
+          />
+          Trim transparent edges
+        </label>
         <button
           onClick={reset}
           className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:text-accent-strong"

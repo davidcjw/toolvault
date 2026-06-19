@@ -1,3 +1,5 @@
+import { opaqueBounds, TRIM_ALPHA } from "./trim";
+
 export type Layer = {
   id: string;
   src: string;
@@ -44,6 +46,43 @@ export function layerRect(layer: Layer, baseW: number, baseH: number): Rect {
   return { x: layer.cx * baseW - w / 2, y: layer.cy * baseH - h / 2, w, h };
 }
 
+/** Axis-aligned bounding rect of a (possibly rotated) layer, in base pixels. */
+export function layerBounds(layer: Layer, baseW: number, baseH: number): Rect {
+  const r = layerRect(layer, baseW, baseH);
+  const rad = (layer.rotation * Math.PI) / 180;
+  const cos = Math.abs(Math.cos(rad));
+  const sin = Math.abs(Math.sin(rad));
+  const bw = r.w * cos + r.h * sin;
+  const bh = r.w * sin + r.h * cos;
+  const cx = r.x + r.w / 2;
+  const cy = r.y + r.h / 2;
+  return { x: cx - bw / 2, y: cy - bh / 2, w: bw, h: bh };
+}
+
+/**
+ * Union of the base rect and every layer's bounds — the size the exported
+ * canvas needs so nothing is clipped. Equals the base rect when all overlays
+ * sit within it.
+ */
+export function compositeBounds(
+  baseW: number,
+  baseH: number,
+  layers: Layer[],
+): Rect {
+  let minX = 0;
+  let minY = 0;
+  let maxX = baseW;
+  let maxY = baseH;
+  for (const layer of layers) {
+    const b = layerBounds(layer, baseW, baseH);
+    minX = Math.min(minX, b.x);
+    minY = Math.min(minY, b.y);
+    maxX = Math.max(maxX, b.x + b.w);
+    maxY = Math.max(maxY, b.y + b.h);
+  }
+  return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
+}
+
 /**
  * Width fraction implied by dragging a corner `dist` pixels from the layer
  * centre. Rotation-invariant: depends only on radial distance.
@@ -76,31 +115,54 @@ export async function renderComposite(
   baseW: number,
   baseH: number,
   layers: Layer[],
+  trim = false,
 ): Promise<Blob> {
-  const canvas = document.createElement("canvas");
-  canvas.width = baseW;
-  canvas.height = baseH;
+  // Expand the canvas to the union of the base and any overlap that spills
+  // past its edges, so nothing gets clipped. `bounds.x`/`.y` are <= 0 when
+  // content sits above/left of the base; everything is offset by -x/-y.
+  const bounds = compositeBounds(baseW, baseH, layers);
+  let canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.ceil(bounds.w));
+  canvas.height = Math.max(1, Math.ceil(bounds.h));
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas not supported");
 
   const base = await loadImage(baseSrc);
-  ctx.drawImage(base, 0, 0, baseW, baseH);
+  ctx.drawImage(base, -bounds.x, -bounds.y, baseW, baseH);
 
   for (const layer of layers) {
     const img = await loadImage(layer.src);
     const r = layerRect(layer, baseW, baseH);
     ctx.save();
     ctx.globalAlpha = layer.opacity;
-    ctx.translate(r.x + r.w / 2, r.y + r.h / 2);
+    ctx.translate(r.x + r.w / 2 - bounds.x, r.y + r.h / 2 - bounds.y);
     ctx.rotate((layer.rotation * Math.PI) / 180);
     if (layer.flipX) ctx.scale(-1, 1);
     ctx.drawImage(img, -r.w / 2, -r.h / 2, r.w, r.h);
     ctx.restore();
   }
 
+  if (trim) {
+    const box = opaqueBounds(
+      ctx.getImageData(0, 0, canvas.width, canvas.height).data,
+      canvas.width,
+      canvas.height,
+      TRIM_ALPHA,
+    );
+    if (box && (box.w !== canvas.width || box.h !== canvas.height)) {
+      const cropped = document.createElement("canvas");
+      cropped.width = box.w;
+      cropped.height = box.h;
+      cropped
+        .getContext("2d")
+        ?.drawImage(canvas, box.x, box.y, box.w, box.h, 0, 0, box.w, box.h);
+      canvas = cropped;
+    }
+  }
+
   return new Promise<Blob>((resolve, reject) =>
     canvas.toBlob(
-      (b) => (b ? resolve(b) : reject(new Error("Export failed"))),
+      (out) => (out ? resolve(out) : reject(new Error("Export failed"))),
       "image/png",
     ),
   );

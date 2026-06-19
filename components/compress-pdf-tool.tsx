@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Download, FileText, Info, Loader2, X } from "lucide-react";
 import { Dropzone } from "@/components/dropzone";
+import { GooeyLoader } from "@/components/gooey-loader";
 import { pageCount } from "@/lib/pdf";
 import { compressPdf, COMPRESS_LEVELS, type CompressLevel } from "@/lib/pdf-compress";
 import { formatBytes, reductionPercent } from "@/lib/format";
@@ -169,6 +170,15 @@ export function CompressPdfTool() {
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
+
+      {busy && (
+        <div className="grid place-items-center rounded-xl border border-line bg-surface p-8 text-center">
+          <GooeyLoader className="mx-auto" />
+          <p className="mt-3 text-sm text-ink">
+            {progress ? `Compressing ${progress.n}/${progress.total}…` : "Compressing…"}
+          </p>
+        </div>
+      )}
 
       {result && (
         <div

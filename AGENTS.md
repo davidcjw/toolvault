@@ -24,8 +24,18 @@ backend that receives user files.
 - **Tool registry** → `lib/tools.ts` is the single source of truth. The homepage
   grid, footer links, `app/sitemap.ts`, and JSON-LD all derive from it. A tool is
   `status: "live"` (has a page) or `"soon"` (roadmap card, not linked).
-- **Pure logic** → `lib/format.ts` (dimension math, byte formatting, array move).
-  Keep it side-effect-free so it's unit-testable; tests in `lib/format.test.ts`.
+- **Pure logic** → `lib/format.ts` (dimension math, byte formatting, array move),
+  plus per-tool math like `lib/overlay.ts` (layer geometry + `compositeBounds`
+  for the expanding export canvas) and `lib/trim.ts` (`opaqueBounds` for cropping
+  transparent edges). Keep it side-effect-free and unit-tested (`*.test.ts`).
+- **Shared image components** → `components/image-dropzone.tsx` wraps `Dropzone`
+  to auto-decode HEIC→PNG (`lib/heic.ts`) for every image tool; use it instead of
+  `Dropzone` for image inputs. `components/image-touchup.tsx` is the reusable
+  erase/restore brush editor (used by Image Overlay's base touch-up).
+- **Long-load indicator** → `components/gooey-loader.tsx` is the shared spinner
+  for any wait that can take a while (AI model/wasm download, background removal,
+  HEIC decode, PDF rasterize, export render). Quick sub-second button actions keep
+  the inline Lucide `Loader2`.
 - **Browser-only processing** → `lib/image.ts` (Canvas), `lib/pdf.ts` (pdf-lib),
   `lib/download.ts`. These touch `window`/DOM and only run client-side. Some
   modules mix pure, tested math with one browser-only render fn (e.g.

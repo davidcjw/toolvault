@@ -12,10 +12,12 @@ import {
   Undo2,
   Wand2,
 } from "lucide-react";
-import { Dropzone } from "@/components/dropzone";
+import { ImageDropzone } from "@/components/image-dropzone";
+import { GooeyLoader } from "@/components/gooey-loader";
 import { changeExtension } from "@/lib/format";
 import { downloadBlob } from "@/lib/download";
 import { removeImageBackground } from "@/lib/bgremove";
+import { opaqueBounds, TRIM_ALPHA } from "@/lib/trim";
 import {
   brushRadius,
   canvasPoint,
@@ -37,6 +39,7 @@ export function RemoveBackgroundTool() {
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState<{ label: string; pct: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [trim, setTrim] = useState(true);
 
   // Editor state
   const [editReady, setEditReady] = useState(false);
@@ -206,10 +209,31 @@ export function RemoveBackgroundTool() {
     lastPoint.current = null;
   }
 
+  /** Crop the canvas to its non-transparent content, or return it unchanged. */
+  function trimmedCanvas(src: HTMLCanvasElement): HTMLCanvasElement {
+    const ctx = src.getContext("2d");
+    if (!ctx) return src;
+    const box = opaqueBounds(
+      ctx.getImageData(0, 0, src.width, src.height).data,
+      src.width,
+      src.height,
+      TRIM_ALPHA,
+    );
+    if (!box || (box.w === src.width && box.h === src.height)) return src;
+    const out = document.createElement("canvas");
+    out.width = box.w;
+    out.height = box.h;
+    out
+      .getContext("2d")
+      ?.drawImage(src, box.x, box.y, box.w, box.h, 0, 0, box.w, box.h);
+    return out;
+  }
+
   function download() {
     const canvas = canvasRef.current;
     if (!canvas || !file) return;
-    canvas.toBlob((blob) => {
+    const out = trim ? trimmedCanvas(canvas) : canvas;
+    out.toBlob((blob) => {
       if (blob) downloadBlob(blob, changeExtension(file.name, "png"));
     }, "image/png");
   }
@@ -217,12 +241,11 @@ export function RemoveBackgroundTool() {
   if (!file || !srcUrl) {
     return (
       <div className="space-y-4">
-        <Dropzone
-          accept="image/*"
+        <ImageDropzone
           onFiles={addFiles}
           multiple={false}
           label="Drop an image here"
-          hint="People, products, objects — PNG or JPG"
+          hint="People, products, objects — PNG, JPG or HEIC"
         />
         <p className="flex items-center justify-center gap-2 text-center font-mono text-xs text-subtle">
           <ShieldCheck className="h-3.5 w-3.5 text-accent" />
@@ -270,8 +293,8 @@ export function RemoveBackgroundTool() {
               />
             ) : busy ? (
               <div className="w-full max-w-xs px-4 text-center">
-                <Loader2 className="mx-auto h-6 w-6 animate-spin text-accent" />
-                <p className="mt-2 text-sm text-ink">{progress?.label}</p>
+                <GooeyLoader className="mx-auto" />
+                <p className="mt-3 text-sm text-ink">{progress?.label}</p>
                 <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-canvas">
                   <div
                     className="h-full rounded-full bg-accent transition-all"
@@ -372,12 +395,23 @@ export function RemoveBackgroundTool() {
             {busy ? "Working…" : "Remove background"}
           </button>
         ) : (
-          <button
-            onClick={download}
-            className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent-strong px-5 py-2.5 font-semibold text-white transition-colors hover:bg-accent"
-          >
-            <Download className="h-4 w-4" /> Download PNG
-          </button>
+          <>
+            <button
+              onClick={download}
+              className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent-strong px-5 py-2.5 font-semibold text-white transition-colors hover:bg-accent"
+            >
+              <Download className="h-4 w-4" /> Download PNG
+            </button>
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-muted">
+              <input
+                type="checkbox"
+                checked={trim}
+                onChange={(e) => setTrim(e.target.checked)}
+                className="accent-accent-strong"
+              />
+              Trim transparent edges
+            </label>
+          </>
         )}
         <button
           onClick={reset}

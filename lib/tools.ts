@@ -61,6 +61,17 @@ export const TOOLS: Tool[] = [
     status: "live",
   },
   {
+    slug: "heic-to-jpg",
+    name: "HEIC to JPG / PNG",
+    tagline: "Convert iPhone HEIC photos to JPG or PNG.",
+    description:
+      "Convert Apple HEIC/HEIF photos (the format iPhones save by default) to widely-supported JPG or PNG. Drop several at once, pick the quality, and download individually or as a zip. Decoded in your browser with libheif — your photos are never uploaded.",
+    category: "Image",
+    icon: FileImage,
+    tags: ["heic", "heif", "jpg", "jpeg", "png", "convert", "iphone"],
+    status: "live",
+  },
+  {
     slug: "merge-pdf",
     name: "Merge PDF",
     tagline: "Combine multiple PDFs into one, in any order.",
