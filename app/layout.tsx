@@ -7,7 +7,12 @@ import { SITE } from "@/lib/site";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
-const OG_IMAGE = `/og?title=${encodeURIComponent(SITE.tagline)}`;
+const OG_IMAGE = {
+  url: `/og?title=${encodeURIComponent(SITE.tagline)}`,
+  width: 1200,
+  height: 630,
+  type: "image/png",
+};
 
 const sans = Hanken_Grotesk({
   variable: "--font-hanken",

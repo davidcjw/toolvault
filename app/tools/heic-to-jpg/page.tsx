@@ -14,7 +14,14 @@ export const metadata: Metadata = tool
       openGraph: {
         title: tool.name,
         description: tool.description,
-        images: [`/og?title=${encodeURIComponent(tool.name)}&cat=${tool.category}`],
+        images: [
+          {
+            url: `/og?title=${encodeURIComponent(tool.name)}&cat=${tool.category}`,
+            width: 1200,
+            height: 630,
+            type: "image/png",
+          },
+        ],
       },
     }
   : {};

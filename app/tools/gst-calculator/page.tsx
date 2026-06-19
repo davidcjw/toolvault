@@ -11,7 +11,7 @@ export const metadata: Metadata = tool
       title: `${tool.name} — Singapore GST (9%)`,
       description: tool.description,
       alternates: { canonical: toolHref(tool) },
-      openGraph: { title: tool.name, description: tool.description, images: [`/og?title=${encodeURIComponent(tool.name)}&cat=${tool.category}`] },
+      openGraph: { title: tool.name, description: tool.description, images: [{ url: `/og?title=${encodeURIComponent(tool.name)}&cat=${tool.category}`, width: 1200, height: 630, type: "image/png" }] },
     }
   : {};
 
