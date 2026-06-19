@@ -10,12 +10,14 @@ import {
   Maximize2,
   RefreshCw,
   RotateCw,
+  Search,
   ChevronUp,
   ChevronDown,
   Trash2,
 } from "lucide-react";
 import { Dropzone } from "@/components/dropzone";
 import { GooeyLoader } from "@/components/gooey-loader";
+import { ImageSearch } from "@/components/image-search";
 import { ImageTouchUp } from "@/components/image-touchup";
 import { downloadBlob } from "@/lib/download";
 import { changeExtension } from "@/lib/format";
@@ -55,6 +57,7 @@ export function ImageOverlayTool() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
   const [touchUp, setTouchUp] = useState(false);
+  const [searching, setSearching] = useState(false);
   const [trimExport, setTrimExport] = useState(true);
   const [bgBusy, setBgBusy] = useState<{ id: string; label: string; pct: number } | null>(null);
   const [bgError, setBgError] = useState<string | null>(null);
@@ -130,6 +133,15 @@ export function ImageOverlayTool() {
       }
     }
     if (overlayInputRef.current) overlayInputRef.current.value = "";
+  }
+
+  async function addOverlayFromBlob(blob: Blob) {
+    const src = URL.createObjectURL(blob);
+    const { w, h } = await loadDims(src);
+    const id = `layer-${idRef.current++}`;
+    setLayers((prev) => [...prev, makeLayer(id, src, w ? h / w : 1)]);
+    setSelectedId(id);
+    setSearching(false);
   }
 
   function updateLayer(id: string, patch: Partial<Layer>) {
@@ -305,6 +317,10 @@ export function ImageOverlayTool() {
     );
   }
 
+  if (searching) {
+    return <ImageSearch onPick={addOverlayFromBlob} onClose={() => setSearching(false)} />;
+  }
+
   if (touchUp) {
     return (
       <ImageTouchUp
@@ -335,6 +351,13 @@ export function ImageOverlayTool() {
           className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-accent-strong hover:text-accent-strong"
         >
           <ImagePlus className="h-4 w-4" /> Add overlay
+        </button>
+        <button
+          onClick={() => setSearching(true)}
+          disabled={!!bgBusy}
+          className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-accent-strong hover:text-accent-strong disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <Search className="h-4 w-4" /> Search images
         </button>
         <input
           ref={overlayInputRef}

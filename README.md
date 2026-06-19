@@ -35,7 +35,7 @@ whole site is statically prerendered and costs ~$0 to run.
 | Tool | What it does |
 |------|--------------|
 | **Image Converter & Compressor** (`/tools/image-converter`) | Convert between WebP/JPG/PNG, resize, and compress — Canvas-based. |
-| **Image Overlay** (`/tools/image-overlay`) | Drag/resize/rotate overlays onto a base photo; per-layer + base background removal, base brush touch-up, expanding canvas, trim-on-export — DOM edit + Canvas render. |
+| **Image Overlay** (`/tools/image-overlay`) | Drag/resize/rotate overlays onto a base photo; search free images (Wikimedia Commons), per-layer + base background removal, base brush touch-up, expanding canvas, trim-on-export — DOM edit + Canvas render. |
 | **HEIC to JPG / PNG** (`/tools/heic-to-jpg`) | Convert iPhone HEIC/HEIF photos to JPG/PNG, batch + zip — `heic2any` (libheif wasm), lazy-loaded. |
 | **Merge PDF** (`/tools/merge-pdf`) | Combine and reorder multiple PDFs into one — `pdf-lib`. |
 | **Split PDF** (`/tools/split-pdf`) | Extract page ranges / split into single pages — `pdf-lib` + `fflate` zip. |

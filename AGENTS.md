@@ -28,6 +28,13 @@ backend that receives user files.
   plus per-tool math like `lib/overlay.ts` (layer geometry + `compositeBounds`
   for the expanding export canvas) and `lib/trim.ts` (`opaqueBounds` for cropping
   transparent edges). Keep it side-effect-free and unit-tested (`*.test.ts`).
+- **Stock image search** → `lib/commons.ts` + `components/image-search.tsx` let
+  Image Overlay add freely-licensed overlays from Wikimedia Commons (`origin=*`
+  for anonymous CORS). This is the only external network call; a client-side
+  `fetch` (no key, no server route, no user files sent — still static). Picked
+  images are fetched from Commons' CORS thumbnail (`upload.wikimedia.org`,
+  `access-control-allow-origin: *`) into a Blob so the export canvas isn't
+  tainted. (Openverse was tried first but its anonymous tier 401s from browsers.)
 - **Shared image components** → `components/image-dropzone.tsx` wraps `Dropzone`
   to auto-decode HEIC→PNG (`lib/heic.ts`) for every image tool; use it instead of
   `Dropzone` for image inputs. `components/image-touchup.tsx` is the reusable
