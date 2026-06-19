@@ -35,6 +35,7 @@ whole site is statically prerendered and costs ~$0 to run.
 | Tool | What it does |
 |------|--------------|
 | **Image Converter & Compressor** (`/tools/image-converter`) | Convert between WebP/JPG/PNG, resize, and compress — Canvas-based. |
+| **Image Overlay** (`/tools/image-overlay`) | Drag/resize/rotate overlay images onto a base photo with built-in per-overlay background removal, export composite PNG — DOM edit + Canvas render. |
 | **Merge PDF** (`/tools/merge-pdf`) | Combine and reorder multiple PDFs into one — `pdf-lib`. |
 | **Split PDF** (`/tools/split-pdf`) | Extract page ranges / split into single pages — `pdf-lib` + `fflate` zip. |
 | **Images → PDF** (`/tools/images-to-pdf`) | Combine images into one PDF, fit-to-image or A4 — `pdf-lib`. |

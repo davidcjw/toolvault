@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { SITE } from "@/lib/site";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function SiteHeader() {
   return (
@@ -26,6 +27,7 @@ export function SiteHeader() {
             <ShieldCheck className="h-3.5 w-3.5 text-accent" aria-hidden />
             no uploads
           </span>
+          <ThemeToggle />
         </div>
       </div>
     </header>

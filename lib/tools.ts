@@ -14,6 +14,7 @@ import {
   Images,
   ImageDown,
   KeyRound,
+  Layers,
   Link2,
   QrCode,
   Scissors,
@@ -46,6 +47,17 @@ export const TOOLS: Tool[] = [
     category: "Image",
     icon: ImageDown,
     tags: ["png", "jpg", "jpeg", "webp", "compress", "resize", "convert"],
+    status: "live",
+  },
+  {
+    slug: "image-overlay",
+    name: "Image Overlay",
+    tagline: "Drag one image onto another — hats, logos, stickers.",
+    description:
+      "Combine two or more images into one: drop a base photo, add overlays like a hat, logo or sticker, then drag, resize and rotate them into place. Composited in your browser at full resolution and downloaded as a PNG — nothing is uploaded.",
+    category: "Image",
+    icon: Layers,
+    tags: ["overlay", "combine", "merge", "compose", "sticker", "watermark"],
     status: "live",
   },
   {

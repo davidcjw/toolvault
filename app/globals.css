@@ -17,9 +17,25 @@
   --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", monospace;
 }
 
-/* Dark variants — override the same custom properties */
+/* Dark variants — override the same custom properties. Applied when the user
+   explicitly picks dark (data-theme), or when the OS is dark and they haven't
+   chosen light. */
+:root[data-theme="dark"] {
+  --color-canvas: #0a0e13;
+  --color-surface: #111720;
+  --color-ink: #f1f5f9;
+  --color-muted: #9aa6b4;
+  --color-subtle: #69737f;
+  --color-line: #1e2731;
+  --color-accent: #22c55e;
+  --color-accent-strong: #16a34a;
+  --color-accent-soft: #0d2a1b;
+  --color-destructive: #f87171;
+  color-scheme: dark;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --color-canvas: #0a0e13;
     --color-surface: #111720;
     --color-ink: #f1f5f9;
@@ -31,6 +47,10 @@
     --color-accent-soft: #0d2a1b;
     --color-destructive: #f87171;
   }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 @layer base {

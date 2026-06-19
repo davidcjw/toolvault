@@ -27,7 +27,9 @@ backend that receives user files.
 - **Pure logic** → `lib/format.ts` (dimension math, byte formatting, array move).
   Keep it side-effect-free so it's unit-testable; tests in `lib/format.test.ts`.
 - **Browser-only processing** → `lib/image.ts` (Canvas), `lib/pdf.ts` (pdf-lib),
-  `lib/download.ts`. These touch `window`/DOM and only run client-side.
+  `lib/download.ts`. These touch `window`/DOM and only run client-side. Some
+  modules mix pure, tested math with one browser-only render fn (e.g.
+  `lib/overlay.ts`: layer geometry is unit-tested, `renderComposite` uses Canvas).
 - **Tool pages** → `app/tools/<slug>/page.tsx` are **server components** that
   export `metadata` (SEO) and render `<ToolShell>` wrapping a `"use client"`
   interactive component from `components/`. Routes are static — no dynamic params.
@@ -37,8 +39,12 @@ backend that receives user files.
 ## Design tokens
 
 Palette and fonts are Tailwind v4 theme tokens in `app/globals.css`
-(`--color-canvas`, `--color-ink`, `--color-accent`, `--color-line`, etc.) with a
-`prefers-color-scheme: dark` override. Use the utilities (`bg-canvas`, `text-ink`,
+(`--color-canvas`, `--color-ink`, `--color-accent`, `--color-line`, etc.). Dark
+mode overrides the same custom properties via `:root[data-theme="dark"]` (manual
+toggle, persisted to `localStorage`) and a `prefers-color-scheme: dark` fallback
+for users who haven't chosen. The `<html data-theme>` attribute is set pre-paint
+by an inline script in `app/layout.tsx`; `components/theme-toggle.tsx` flips it.
+Use the utilities (`bg-canvas`, `text-ink`,
 `text-muted`, `border-line`, `bg-accent`) — don't hardcode hex in components.
 Green is the single accent; use `accent-strong` for button fills (AA contrast on
 white). Fonts: Hanken Grotesk (`font-sans`) + JetBrains Mono (`font-mono`, used

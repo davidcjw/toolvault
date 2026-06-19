@@ -15,6 +15,7 @@ import {
 import { Dropzone } from "@/components/dropzone";
 import { changeExtension } from "@/lib/format";
 import { downloadBlob } from "@/lib/download";
+import { removeImageBackground } from "@/lib/bgremove";
 import {
   brushRadius,
   canvasPoint,
@@ -77,17 +78,7 @@ export function RemoveBackgroundTool() {
     setError(null);
     setProgress({ label: "Loading model…", pct: 0 });
     try {
-      const { removeBackground } = await import("@imgly/background-removal");
-      const blob = await removeBackground(file, {
-        output: { format: "image/png" },
-        progress: (key: string, current: number, total: number) => {
-          const pct = total ? Math.round((current / total) * 100) : 0;
-          const label = key.startsWith("fetch")
-            ? "Downloading model (one-time)…"
-            : "Removing background…";
-          setProgress({ label, pct });
-        },
-      });
+      const blob = await removeImageBackground(file, setProgress);
       setResultUrl(URL.createObjectURL(blob));
     } catch (err) {
       setError((err as Error).message || "Background removal failed. Try another image.");
