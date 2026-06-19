@@ -97,6 +97,24 @@ export function ImageOverlayTool() {
     setSelectedId((cur) => (cur === id ? null : cur));
   }
 
+  async function removeBaseBg() {
+    if (!base || bgBusy) return;
+    setBgError(null);
+    setBgBusy({ id: "base", label: "Loading model…", pct: 0 });
+    try {
+      const blob = await removeImageBackground(base.src, (p) =>
+        setBgBusy({ id: "base", ...p }),
+      );
+      const url = URL.createObjectURL(blob);
+      URL.revokeObjectURL(base.src);
+      setBase({ ...base, src: url });
+    } catch (err) {
+      setBgError((err as Error).message || "Background removal failed. Try another image.");
+    } finally {
+      setBgBusy(null);
+    }
+  }
+
   async function removeBg(layer: Layer) {
     if (bgBusy) return;
     setBgError(null);
@@ -234,10 +252,26 @@ export function ImageOverlayTool() {
           hidden
           onChange={(e) => addOverlayFiles(e.target.files)}
         />
+        <button
+          onClick={removeBaseBg}
+          disabled={!!bgBusy}
+          className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-accent-strong hover:text-accent-strong disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {bgBusy?.id === "base" ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Eraser className="h-4 w-4" />
+          )}
+          {bgBusy?.id === "base"
+            ? `${bgBusy.label} ${bgBusy.pct}%`
+            : "Remove base background"}
+        </button>
         <span className="font-mono text-xs text-subtle">
           {layers.length} overlay{layers.length === 1 ? "" : "s"}
         </span>
       </div>
+
+      {bgError && <p className="text-sm text-destructive">{bgError}</p>}
 
       {/* Stage */}
       <div className={`grid place-items-center rounded-xl border border-line p-3 ${CHECKER}`}>
@@ -379,7 +413,6 @@ export function ImageOverlayTool() {
               <Trash2 className="h-4 w-4" /> Delete
             </button>
           </div>
-          {bgError && <p className="text-sm text-destructive">{bgError}</p>}
           <p className="text-xs text-subtle">
             Remove background runs an AI model in your browser (downloaded once);
             your images are never uploaded.
