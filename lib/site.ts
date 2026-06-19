@@ -4,4 +4,5 @@ export const SITE = {
   description:
     "A growing collection of free file tools that run 100% in your browser. Convert and compress images, merge PDFs and more — nothing is ever uploaded to a server.",
   url: "https://toolvault.davidcjw.com",
+  repo: "https://github.com/davidcjw/toolvault",
 } as const;

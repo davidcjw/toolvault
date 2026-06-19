@@ -10,8 +10,17 @@ import {
   Lock,
   Search,
   Sparkles,
+  Star,
   Zap,
 } from "lucide-react";
+
+function GithubMark(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden {...props}>
+      <path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.67.07-.52.28-.87.5-1.07-1.77-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.83-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.52.56.83 1.28.83 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z" />
+    </svg>
+  );
+}
 import { CATEGORIES, TOOLS, type ToolCategory } from "@/lib/tools";
 import { ToolCard } from "@/components/tool-card";
 import { SITE } from "@/lib/site";
@@ -99,6 +108,16 @@ export function Landing() {
             >
               How it works
             </Link>
+            <a
+              href={SITE.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-5 py-3 font-semibold text-ink transition-colors hover:border-accent/40"
+            >
+              <GithubMark className="h-4 w-4" />
+              Star
+              <Star className="h-3.5 w-3.5 text-amber-500 transition-transform group-hover:scale-110 group-hover:fill-amber-400" aria-hidden />
+            </a>
           </motion.div>
 
           <motion.ul
