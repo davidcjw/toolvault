@@ -36,7 +36,7 @@ whole site is statically prerendered and costs ~$0 to run.
 |------|--------------|
 | **Image Converter & Compressor** (`/tools/image-converter`) | Convert between WebP/JPG/PNG, resize, and compress — Canvas-based. |
 | **Image Overlay** (`/tools/image-overlay`) | Drag/resize/rotate overlays onto a base photo; search free images (Wikimedia Commons), per-layer + base background removal, base brush touch-up, expanding canvas, trim-on-export — DOM edit + Canvas render. |
-| **HEIC to JPG / PNG** (`/tools/heic-to-jpg`) | Convert iPhone HEIC/HEIF photos to JPG/PNG, batch + zip — `heic2any` (libheif wasm), lazy-loaded. |
+| **HEIC to JPG / PNG** (`/tools/heic-to-jpg`) | Convert iPhone HEIC/HEIF photos to JPG/PNG, batch + zip — `heic-to` (libheif wasm), lazy-loaded. |
 | **Merge PDF** (`/tools/merge-pdf`) | Combine and reorder multiple PDFs into one — `pdf-lib`. |
 | **Split PDF** (`/tools/split-pdf`) | Extract page ranges / split into single pages — `pdf-lib` + `fflate` zip. |
 | **Images → PDF** (`/tools/images-to-pdf`) | Combine images into one PDF, fit-to-image or A4 — `pdf-lib`. |
@@ -142,6 +142,8 @@ Built on the work of these open-source projects:
 - [Motion](https://motion.dev/) — landing animations
 - [pdf-lib](https://pdf-lib.js.org/) & [pdf.js](https://mozilla.github.io/pdf.js/) — PDF read/write/render
 - [@imgly/background-removal](https://github.com/imgly/background-removal-js) — in-browser background removal
+- [heic-to](https://github.com/hoppergee/heic-to) — HEIC/HEIF decoding (libheif wasm)
 - [qrcode](https://github.com/soldair/node-qrcode) — QR generation
 - [fflate](https://github.com/101arrowz/fflate) — client-side zipping
 - [Lucide](https://lucide.dev/) — icons
+- [Wikimedia Commons](https://commons.wikimedia.org/) — free-image search source
