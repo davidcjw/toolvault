@@ -17,6 +17,19 @@ This is both a useful product and an SEO play: every tool is its own
 search-optimised landing page, and because all processing is client-side, the
 whole site is statically prerendered and costs ~$0 to run.
 
+## Table of contents
+
+- [Live tools](#live-tools)
+- [Tech stack](#tech-stack)
+- [SEO / growth](#seo--growth)
+- [Develop](#develop)
+- [Add a new tool](#add-a-new-tool)
+- [Deploy (Vercel)](#deploy-vercel)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
 ## Live tools
 
 | Tool | What it does |
@@ -117,3 +130,16 @@ By participating you agree to uphold a welcoming, harassment-free environment.
 ## License
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Acknowledgements
+
+Built on the work of these open-source projects:
+
+- [Next.js](https://nextjs.org/) & [React](https://react.dev/) — app framework
+- [Tailwind CSS](https://tailwindcss.com/) — styling
+- [Motion](https://motion.dev/) — landing animations
+- [pdf-lib](https://pdf-lib.js.org/) & [pdf.js](https://mozilla.github.io/pdf.js/) — PDF read/write/render
+- [@imgly/background-removal](https://github.com/imgly/background-removal-js) — in-browser background removal
+- [qrcode](https://github.com/soldair/node-qrcode) — QR generation
+- [fflate](https://github.com/101arrowz/fflate) — client-side zipping
+- [Lucide](https://lucide.dev/) — icons
