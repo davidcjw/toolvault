@@ -18,16 +18,17 @@ export function formatExt(format: HeicFormat): string {
 
 /**
  * Decode a HEIC/HEIF blob to a JPEG or PNG blob. Browser-only: dynamically
- * imports `heic2any` (libheif wasm) so the decoder only loads when used.
+ * imports `heic-to` (libheif wasm) so the decoder only loads when used.
  */
 export async function convertHeic(
   blob: Blob,
   format: HeicFormat,
   quality = 0.9,
 ): Promise<Blob> {
-  const heic2any = (await import("heic2any")).default;
-  const out = await heic2any({ blob, toType: format, quality });
-  return Array.isArray(out) ? out[0] : out;
+  // heic-to's Next build bundles a modern libheif (broader iPhone HEIC/HEVC
+  // support than heic2any) with the wasm inlined, so there's no asset to serve.
+  const { heicTo } = await import("heic-to/next");
+  return heicTo({ blob, type: format, quality });
 }
 
 /**
