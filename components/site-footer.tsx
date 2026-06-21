@@ -8,7 +8,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-8 px-5 py-12 sm:grid-cols-2 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
-            <span className="grid h-7 w-7 place-items-center rounded-md bg-ink font-mono text-xs font-bold text-canvas">
+            <span className="grid h-7 w-7 place-items-center rounded-full bg-ink text-xs font-bold text-canvas">
               T
             </span>
             <span className="font-bold tracking-tight text-ink">{SITE.name}</span>

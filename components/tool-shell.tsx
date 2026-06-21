@@ -64,7 +64,7 @@ export function ToolShell({
       </nav>
 
       <header className="mt-5">
-        <h1 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+        <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
           {tool.name}
         </h1>
         <p className="mt-2 text-lg text-muted">{tool.tagline}</p>

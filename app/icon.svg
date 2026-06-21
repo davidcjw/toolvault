@@ -1,13 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#111a2b" />
-      <stop offset="1" stop-color="#0b1220" />
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="7" fill="url(#bg)" />
+  <rect width="32" height="32" rx="10" fill="#180102" />
   <!-- keyhole: secure vault mark -->
-  <g fill="#22c55e">
+  <g fill="#f16b46">
     <circle cx="16" cy="13" r="4.4" />
     <path d="M13.5 15 L18.5 15 L19.6 23.4 Q19.7 24 19.1 24 L12.9 24 Q12.3 24 12.4 23.4 Z" />
   </g>

@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-const KEYHOLE = `<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='#0f172a'/><g fill='#22c55e'><circle cx='16' cy='13' r='4.4'/><path d='M13.5 15 L18.5 15 L19.6 23.4 Q19.7 24 19.1 24 L12.9 24 Q12.3 24 12.4 23.4 Z'/></g></svg>`;
+const KEYHOLE = `<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 32 32'><rect width='32' height='32' rx='10' fill='#180102'/><g fill='#f16b46'><circle cx='16' cy='13' r='4.4'/><path d='M13.5 15 L18.5 15 L19.6 23.4 Q19.7 24 19.1 24 L12.9 24 Q12.3 24 12.4 23.4 Z'/></g></svg>`;
 
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -21,8 +21,8 @@ export function GET(request: Request) {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 80,
-          background: "linear-gradient(135deg, #0b1220 0%, #111a2b 100%)",
-          color: "#f8fafc",
+          background: "linear-gradient(135deg, #ece4d7 0%, #f8f0e3 100%)",
+          color: "#180102",
           fontFamily: "sans-serif",
         }}
       >
@@ -37,8 +37,8 @@ export function GET(request: Request) {
               style={{
                 display: "flex",
                 fontSize: 26,
-                color: "#22c55e",
-                border: "2px solid rgba(34,197,94,0.4)",
+                color: "#180102",
+                border: "2px solid rgba(24,1,2,0.9)",
                 borderRadius: 999,
                 padding: "8px 22px",
               }}
@@ -62,11 +62,11 @@ export function GET(request: Request) {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 30 }}>
-          <span style={{ color: "#22c55e" }}>Free</span>
-          <span style={{ color: "#64748b" }}>·</span>
+          <span style={{ color: "#b8461f" }}>Free</span>
+          <span style={{ color: "#aca396" }}>·</span>
           <span>runs in your browser</span>
-          <span style={{ color: "#64748b" }}>·</span>
-          <span style={{ color: "#22c55e" }}>nothing uploaded</span>
+          <span style={{ color: "#aca396" }}>·</span>
+          <span style={{ color: "#b8461f" }}>nothing uploaded</span>
         </div>
       </div>
     ),

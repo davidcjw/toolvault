@@ -61,8 +61,7 @@ export function Landing() {
 
   return (
     <div className="relative overflow-hidden">
-      {/* Backdrop */}
-      <div className="bg-grid pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_40%,transparent_100%)]" />
+      {/* Backdrop — warm coral wash */}
       <div className="glow-accent pointer-events-none absolute -top-40 left-1/2 -z-10 h-[520px] w-[820px] -translate-x-1/2" />
 
       {/* ── Hero ─────────────────────────────────────────────── */}
@@ -70,19 +69,19 @@ export function Landing() {
         <motion.div initial="hidden" animate="show" variants={stagger}>
           <motion.span
             variants={fadeUp}
-            className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft px-3 py-1.5 font-mono text-xs font-medium text-accent-strong"
+            className="inline-flex items-center gap-2 rounded-full border border-line-strong px-3.5 py-1.5 text-xs font-medium text-ink"
           >
-            <Cpu className="h-3.5 w-3.5" aria-hidden />
+            <Cpu className="h-3.5 w-3.5 text-accent" aria-hidden />
             runs on your device, not our servers
           </motion.span>
 
           <motion.h1
             variants={fadeUp}
-            className="mt-5 text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl md:text-6xl"
+            className="mt-5 text-4xl font-bold leading-[1.03] tracking-tight text-ink sm:text-5xl md:text-6xl"
           >
             Free tools that
             <br />
-            <span className="text-accent-strong">never touch</span> a server.
+            <span className="text-accent">never touch</span> a server.
           </motion.h1>
 
           <motion.p
@@ -97,14 +96,14 @@ export function Landing() {
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
             <Link
               href="#tools"
-              className="inline-flex items-center gap-2 rounded-xl bg-accent-strong px-5 py-3 font-semibold text-white transition-transform hover:scale-[1.03] hover:bg-accent"
+              className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 font-semibold text-canvas transition-transform hover:scale-[1.03]"
             >
               Browse all tools
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
             <Link
               href="#how"
-              className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-5 py-3 font-semibold text-ink transition-colors hover:border-accent/40"
+              className="inline-flex items-center gap-2 rounded-full border border-line-strong px-5 py-3 font-semibold text-ink transition-colors hover:bg-ink hover:text-canvas"
             >
               How it works
             </Link>
@@ -112,11 +111,11 @@ export function Landing() {
               href={SITE.repo}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-5 py-3 font-semibold text-ink transition-colors hover:border-accent/40"
+              className="group inline-flex items-center gap-2 rounded-full border border-line-strong px-5 py-3 font-semibold text-ink transition-colors hover:bg-ink hover:text-canvas"
             >
               <GithubMark className="h-4 w-4" />
               Star
-              <Star className="h-3.5 w-3.5 text-amber-500 transition-transform group-hover:scale-110 group-hover:fill-amber-400" aria-hidden />
+              <Star className="h-3.5 w-3.5 text-gold transition-transform group-hover:scale-110 group-hover:fill-gold" aria-hidden />
             </a>
           </motion.div>
 
@@ -144,8 +143,8 @@ export function Landing() {
             { n: "02", t: "It runs locally", d: "Your browser does the work. Nothing is ever uploaded." },
             { n: "03", t: "Save it", d: "Download or copy the result instantly. No watermarks, no sign-up." },
           ].map((s) => (
-            <div key={s.n} className="rounded-2xl border border-line bg-surface p-6">
-              <span className="font-mono text-sm text-accent">{s.n}</span>
+            <div key={s.n} className="rounded-3xl border border-line bg-surface p-6">
+              <span className="font-mono text-sm text-accent-strong">{s.n}</span>
               <h3 className="mt-2 text-lg font-bold tracking-tight text-ink">{s.t}</h3>
               <p className="mt-1 text-sm text-muted">{s.d}</p>
             </div>
@@ -157,7 +156,7 @@ export function Landing() {
       <section id="tools" className="mx-auto max-w-6xl scroll-mt-20 px-5 py-12">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-3xl font-extrabold tracking-tight text-ink">
+            <h2 className="text-3xl font-bold tracking-tight text-ink">
               The toolbox
             </h2>
             <p className="mt-2 text-muted">
@@ -165,14 +164,14 @@ export function Landing() {
             </p>
           </div>
           <div className="relative w-full sm:w-72">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-subtle" />
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-subtle" />
             <input
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search tools…"
               aria-label="Search tools"
-              className="w-full rounded-xl border border-line bg-surface py-2.5 pl-9 pr-3 text-sm text-ink outline-none transition-colors placeholder:text-subtle focus:border-accent"
+              className="w-full rounded-full border border-line bg-surface py-2.5 pl-10 pr-4 text-sm text-ink outline-none transition-colors placeholder:text-subtle focus:border-accent"
             />
           </div>
         </div>
@@ -184,8 +183,8 @@ export function Landing() {
               onClick={() => setCategory(cat)}
               className={`cursor-pointer rounded-full border px-3.5 py-1.5 font-mono text-xs transition-colors ${
                 category === cat
-                  ? "border-accent bg-accent text-white"
-                  : "border-line bg-surface text-muted hover:border-accent/40"
+                  ? "border-ink bg-ink text-canvas"
+                  : "border-line-strong text-ink hover:bg-ink hover:text-canvas"
               }`}
             >
               {cat}
@@ -226,7 +225,7 @@ function HeroVisual({ reduce }: { reduce: boolean }) {
       transition={{ duration: 0.6, delay: 0.15 }}
       className="relative mx-auto w-full max-w-sm"
     >
-      <div className="relative overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_30px_80px_-40px_rgba(15,23,42,0.45)]">
+      <div className="relative overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_30px_80px_-40px_rgba(24,1,2,0.4)]">
         <div className="flex items-center gap-1.5 border-b border-line px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-line" />
           <span className="h-2.5 w-2.5 rounded-full bg-line" />

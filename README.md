@@ -3,7 +3,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript&logoColor=white)
-![100% client-side](https://img.shields.io/badge/processing-100%25%20client--side-brightgreen)
+![100% client-side](https://img.shields.io/badge/processing-100%25%20client--side-f16b46)
 
 A growing collection of free file tools that run **100% in your browser**. No
 uploads, no sign-up, no file-size limits. Your files stay locked on your device

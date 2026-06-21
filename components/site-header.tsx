@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ShieldCheck, Star } from "lucide-react";
 import { SITE } from "@/lib/site";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 function GithubMark(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -16,7 +15,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
         <Link href="/" className="group flex items-center gap-2.5">
-          <span className="grid h-8 w-8 place-items-center rounded-md bg-ink font-mono text-sm font-bold text-canvas transition-transform group-hover:-rotate-6">
+          <span className="grid h-8 w-8 place-items-center rounded-full bg-ink text-sm font-bold text-canvas transition-transform group-hover:-rotate-6">
             T
           </span>
           <span className="text-lg font-bold tracking-tight text-ink">
@@ -24,14 +23,14 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Link
             href="/#tools"
             className="text-sm font-medium text-muted transition-colors hover:text-ink"
           >
             All tools
           </Link>
-          <span className="hidden items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 font-mono text-xs text-muted sm:flex">
+          <span className="hidden items-center gap-1.5 rounded-full border border-line-strong px-3 py-1.5 text-xs font-medium text-ink sm:flex">
             <ShieldCheck className="h-3.5 w-3.5 text-accent" aria-hidden />
             no uploads
           </span>
@@ -40,13 +39,12 @@ export function SiteHeader() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Star ${SITE.name} on GitHub`}
-            className="group flex items-center gap-1.5 rounded-lg border border-line bg-surface px-2.5 py-1.5 text-sm font-medium text-ink transition-colors hover:border-accent/40"
+            className="group flex items-center gap-1.5 rounded-full border border-line-strong px-3 py-1.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-canvas"
           >
             <GithubMark className="h-4 w-4" />
             <span className="hidden sm:inline">Star</span>
-            <Star className="h-3.5 w-3.5 text-amber-500 transition-transform group-hover:scale-110 group-hover:fill-amber-400" aria-hidden />
+            <Star className="h-3.5 w-3.5 text-gold transition-transform group-hover:scale-110 group-hover:fill-gold" aria-hidden />
           </a>
-          <ThemeToggle />
         </div>
       </div>
     </header>

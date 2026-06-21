@@ -55,17 +55,21 @@ backend that receives user files.
 
 ## Design tokens
 
-Palette and fonts are Tailwind v4 theme tokens in `app/globals.css`
-(`--color-canvas`, `--color-ink`, `--color-accent`, `--color-line`, etc.). Dark
-mode overrides the same custom properties via `:root[data-theme="dark"]` (manual
-toggle, persisted to `localStorage`) and a `prefers-color-scheme: dark` fallback
-for users who haven't chosen. The `<html data-theme>` attribute is set pre-paint
-by an inline script in `app/layout.tsx`; `components/theme-toggle.tsx` flips it.
-Use the utilities (`bg-canvas`, `text-ink`,
-`text-muted`, `border-line`, `bg-accent`) — don't hardcode hex in components.
-Green is the single accent; use `accent-strong` for button fills (AA contrast on
-white). Fonts: Hanken Grotesk (`font-sans`) + JetBrains Mono (`font-mono`, used
-for labels, file sizes, tags). Icons: Lucide only, no emoji.
+The site uses the **Fauna Robotics design system** (`~/code/design-systems/fauna-ds`),
+adopted as Tailwind v4 theme tokens in `app/globals.css` — a warm, playful
+robotics look: cream/beige paper, warm near-black ink, a coral primary accent,
+and soft generous radii. It's a **single light palette — no dark mode** (the warm
+cream IS the identity). Use the utilities (`bg-canvas` = cream page, `bg-surface`
+= raised cream cards, `text-ink`, `text-muted`, `border-line` = hairline,
+`border-line-strong` = ink outline for pills/chips, `bg-accent`/`text-accent` =
+coral) — don't hardcode hex in components. `accent` is coral (`#f16b46`); use
+`accent-strong` (`#b8461f`) for text/fills needing AA contrast on cream/white.
+The "fun robots" set (`sky`, `gold`, `teal`, `brick`) is available as
+`text-*`/`bg-*` tokens for variety. Radii are bumped site-wide (Tailwind's
+`rounded-*` scale → 10–40px); pill controls use `rounded-full`. Fonts: Hanken
+Grotesk (`font-sans`, Fauna's free stand-in for Matter; body weight 500) +
+JetBrains Mono (`font-mono`, for labels, file sizes, tags). Icons: Lucide only,
+no emoji.
 
 ## Conventions
 

@@ -1,66 +1,50 @@
 @import "tailwindcss";
 
-/* ── Design tokens: "precision utility / blueprint" ───────────────── */
+/* ── Design tokens: Fauna Robotics ────────────────────────────────────
+   Warm, playful robotics palette extracted from faunarobotics.com:
+   cream/beige paper, warm near-black ink, a coral primary accent (plus a
+   "fun robots" accent set), a single medium-weight grotesque (Matter →
+   Hanken Grotesk fallback) and very soft, rounded corners. Single light
+   palette — no dark mode (the warm cream IS the identity). */
 @theme {
-  --color-canvas: #fbfbf9;
-  --color-surface: #ffffff;
-  --color-ink: #0f172a;
-  --color-muted: #4f5b69;
-  --color-subtle: #8b95a3;
-  --color-line: #e7e7e0;
-  --color-accent: #16a34a;
-  --color-accent-strong: #15803d;
-  --color-accent-soft: #ecfdf3;
-  --color-destructive: #dc2626;
+  /* Surfaces & text */
+  --color-canvas: #ece4d7;        /* warm-cream page surface */
+  --color-surface: #f8f0e3;       /* lighter cream — raised cards/inputs */
+  --color-ink: #180102;           /* warm near-black text */
+  --color-muted: rgba(24, 1, 2, 0.62);  /* secondary body text */
+  --color-subtle: rgba(24, 1, 2, 0.42);  /* faint labels / placeholders */
+  --color-line: rgba(24, 1, 2, 0.14);    /* hairline borders */
+  --color-line-strong: rgba(24, 1, 2, 0.9); /* ink outline (chips/pills) */
 
-  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  /* Accent — coral primary, with the playful "fun robots" set */
+  --color-accent: #f16b46;        /* coral — brand accent */
+  --color-accent-strong: #b8461f; /* darker coral — AA text/fills on cream/white */
+  --color-accent-soft: #f7ddd1;   /* soft coral tint — badges/chips */
+  --color-sky: #63a4bc;
+  --color-gold: #dbb154;
+  --color-teal: #3dac91;
+  --color-brick: #a7625a;
+  --color-destructive: #b5402f;
+
+  /* Type */
+  --font-sans: var(--font-hanken), "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", monospace;
-}
 
-/* Dark variants — override the same custom properties. Applied when the user
-   explicitly picks dark (data-theme), or when the OS is dark and they haven't
-   chosen light. */
-:root[data-theme="dark"] {
-  --color-canvas: #0a0e13;
-  --color-surface: #111720;
-  --color-ink: #f1f5f9;
-  --color-muted: #9aa6b4;
-  --color-subtle: #69737f;
-  --color-line: #1e2731;
-  --color-accent: #22c55e;
-  --color-accent-strong: #16a34a;
-  --color-accent-soft: #0d2a1b;
-  --color-destructive: #f87171;
-  color-scheme: dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --color-canvas: #0a0e13;
-    --color-surface: #111720;
-    --color-ink: #f1f5f9;
-    --color-muted: #9aa6b4;
-    --color-subtle: #69737f;
-    --color-line: #1e2731;
-    --color-accent: #22c55e;
-    --color-accent-strong: #16a34a;
-    --color-accent-soft: #0d2a1b;
-    --color-destructive: #f87171;
-  }
-}
-
-:root[data-theme="light"] {
-  color-scheme: light;
+  /* Radii — Fauna is soft: everything rounds generously */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+  --radius-3xl: 40px;
 }
 
 @layer base {
-  :root {
-    color-scheme: light dark;
-  }
   body {
     background-color: var(--color-canvas);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-weight: 500;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -69,23 +53,17 @@
     color: #fff;
   }
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-accent-strong);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 }
 
-/* Faint blueprint dot-grid backdrop */
-.bg-grid {
-  background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-/* Soft accent glow used behind the hero */
+/* Soft warm wash used behind the hero (replaces the blueprint grid). */
 .glow-accent {
   background: radial-gradient(
     closest-side,
-    color-mix(in oklab, var(--color-accent) 22%, transparent),
+    color-mix(in oklab, var(--color-accent) 26%, transparent),
     transparent
   );
 }

@@ -10,9 +10,9 @@ export function ToolCard({ tool }: { tool: Tool }) {
     <>
       <div className="flex items-start justify-between">
         <span
-          className={`grid h-11 w-11 place-items-center rounded-xl border transition-colors ${
+          className={`grid h-11 w-11 place-items-center rounded-2xl border transition-colors ${
             isLive
-              ? "border-accent/25 bg-accent-soft text-accent-strong group-hover:bg-accent group-hover:text-white"
+              ? "border-accent/30 bg-accent-soft text-accent-strong group-hover:bg-accent group-hover:text-white"
               : "border-line bg-canvas text-subtle"
           }`}
         >
@@ -41,7 +41,7 @@ export function ToolCard({ tool }: { tool: Tool }) {
   );
 
   const base =
-    "group relative flex h-full flex-col rounded-2xl border border-line bg-surface p-5";
+    "group relative flex h-full flex-col rounded-3xl border border-line bg-surface p-5";
 
   if (!isLive) {
     return (
@@ -54,7 +54,7 @@ export function ToolCard({ tool }: { tool: Tool }) {
   return (
     <Link
       href={toolHref(tool)}
-      className={`${base} transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_12px_30px_-12px_rgba(22,163,74,0.35)]`}
+      className={`${base} transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_16px_36px_-16px_rgba(241,107,70,0.45)]`}
     >
       {inner}
     </Link>
