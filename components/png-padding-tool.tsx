@@ -3,17 +3,29 @@
 import { useEffect, useRef, useState } from "react";
 import { Download, Link, Link2Off, RefreshCw } from "lucide-react";
 import { ImageDropzone } from "@/components/image-dropzone";
-import { clampPad, paddedSize, ZERO_PADDING, type Padding } from "@/lib/padding";
+import { clampPad, paddedSize, type Padding } from "@/lib/padding";
 import { downloadBlob } from "@/lib/download";
 
 type Side = keyof Padding;
 const SIDES: Side[] = ["top", "right", "bottom", "left"];
 
+/** Raw editable strings so backspacing/empty inputs behave naturally. */
+type PadInput = Record<Side, string>;
+
+function toPadding(input: PadInput): Padding {
+  return {
+    top: clampPad(Number(input.top)),
+    right: clampPad(Number(input.right)),
+    bottom: clampPad(Number(input.bottom)),
+    left: clampPad(Number(input.left)),
+  };
+}
+
 export function PngPaddingTool() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [src, setSrc] = useState<string | null>(null);
-  const [pad, setPad] = useState<Padding>({ ...ZERO_PADDING, top: 40, right: 40, bottom: 40, left: 40 });
-  const [linked, setLinked] = useState(true);
+  const [pad, setPad] = useState<PadInput>({ top: "40", right: "40", bottom: "40", left: "40" });
+  const [linked, setLinked] = useState(false);
   const [transparent, setTransparent] = useState(true);
   const [color, setColor] = useState("#ffffff");
   const [out, setOut] = useState<{ width: number; height: number } | null>(null);
@@ -23,9 +35,8 @@ export function PngPaddingTool() {
     if (img) setSrc(URL.createObjectURL(img));
   }
 
-  function setSide(side: Side, value: number) {
-    const v = clampPad(value);
-    setPad((p) => (linked ? { top: v, right: v, bottom: v, left: v } : { ...p, [side]: v }));
+  function setSide(side: Side, raw: string) {
+    setPad((p) => (linked ? { top: raw, right: raw, bottom: raw, left: raw } : { ...p, [side]: raw }));
   }
 
   useEffect(() => {
@@ -46,7 +57,8 @@ export function PngPaddingTool() {
 
       const iw = img.naturalWidth;
       const ih = img.naturalHeight;
-      const { width, height } = paddedSize(iw, ih, pad);
+      const px = toPadding(pad);
+      const { width, height } = paddedSize(iw, ih, px);
       c.width = width;
       c.height = height;
 
@@ -55,7 +67,7 @@ export function PngPaddingTool() {
         ctx.fillStyle = color;
         ctx.fillRect(0, 0, width, height);
       }
-      ctx.drawImage(img, clampPad(pad.left), clampPad(pad.top), iw, ih);
+      ctx.drawImage(img, px.left, px.top, iw, ih);
       setOut({ width, height });
     })();
 
@@ -123,9 +135,11 @@ export function PngPaddingTool() {
                 </span>
                 <input
                   type="number"
+                  inputMode="numeric"
                   min={0}
                   value={pad[side]}
-                  onChange={(e) => setSide(side, Number(e.target.value))}
+                  onChange={(e) => setSide(side, e.target.value)}
+                  onBlur={(e) => setSide(side, String(clampPad(Number(e.target.value))))}
                   className="w-full rounded-lg border border-line bg-canvas px-3 py-1.5 text-sm text-ink focus:border-accent focus:outline-none"
                 />
               </label>
