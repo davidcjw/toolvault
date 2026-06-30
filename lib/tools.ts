@@ -10,6 +10,7 @@ import {
   FileImage,
   FileStack,
   Fingerprint,
+  Frame,
   Hash,
   Images,
   ImageDown,
@@ -58,6 +59,17 @@ export const TOOLS: Tool[] = [
     category: "Image",
     icon: Layers,
     tags: ["overlay", "combine", "merge", "compose", "sticker", "watermark"],
+    status: "live",
+  },
+  {
+    slug: "png-padding",
+    name: "PNG Padding",
+    tagline: "Add transparent or colored space around a PNG.",
+    description:
+      "Add padding around a PNG on any side — top, right, bottom or left, independently or all at once. Keep the added space transparent or fill it with a solid colour. Composited in your browser at full resolution and downloaded as a PNG — nothing is uploaded.",
+    category: "Image",
+    icon: Frame,
+    tags: ["png", "padding", "pad", "margin", "border", "space", "canvas"],
     status: "live",
   },
   {

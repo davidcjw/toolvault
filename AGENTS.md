@@ -26,8 +26,9 @@ backend that receives user files.
   `status: "live"` (has a page) or `"soon"` (roadmap card, not linked).
 - **Pure logic** → `lib/format.ts` (dimension math, byte formatting, array move),
   plus per-tool math like `lib/overlay.ts` (layer geometry + `compositeBounds`
-  for the expanding export canvas) and `lib/trim.ts` (`opaqueBounds` for cropping
-  transparent edges). Keep it side-effect-free and unit-tested (`*.test.ts`).
+  for the expanding export canvas), `lib/trim.ts` (`opaqueBounds` for cropping
+  transparent edges) and `lib/padding.ts` (`paddedSize` for per-side PNG
+  padding). Keep it side-effect-free and unit-tested (`*.test.ts`).
 - **Stock image search** → `lib/commons.ts` + `components/image-search.tsx` let
   Image Overlay add freely-licensed overlays from Wikimedia Commons (`origin=*`
   for anonymous CORS). This is the only external network call; a client-side
